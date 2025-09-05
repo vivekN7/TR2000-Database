@@ -141,7 +141,7 @@ sqlplus TR2000_STAGING/piping@localhost:1521/XEPDB1 @DEPLOY_ALL.sql
 
 | Package | Purpose | Key Functions |
 |---------|---------|---------------|
-| **PKG_ETL_VALIDATION** | Safe data conversions | `safe_to_number()`, `safe_to_date()`, `validate_json()` |
+| **PKG_ETL_VALIDATION** | Safe data conversions + failure tracking | `safe_to_number()`, `safe_to_date()`, `validate_json()`, `get_conversion_failures()` |
 | **PKG_API_CLIENT** | API communication via proxy | `fetch_reference_data()`, `fetch_pcs_list()` |
 | **PKG_MAIN_ETL_CONTROL** | ETL orchestration | `run_main_etl()` |
 | **PKG_ETL_PROCESSOR** | JSON parsing | `parse_and_load_*()` functions |
@@ -176,10 +176,27 @@ FROM API_SERVICE.API_CALL_STATS
 ORDER BY call_timestamp DESC;
 ```
 
-#### Conversion Statistics
+#### Conversion Statistics & Error Tracking
 ```sql
--- Get conversion error summary
+-- Get conversion error summary (detailed breakdown)
 SELECT PKG_ETL_VALIDATION.get_conversion_stats FROM dual;
+
+-- Get current session failure count
+SELECT PKG_ETL_VALIDATION.get_conversion_failures() as current_failures FROM dual;
+
+-- Check ETL statistics for conversion failures (includes WARNING status)
+SELECT run_id, stat_type, operation_name, records_failed, status
+FROM ETL_STATISTICS 
+WHERE records_failed > 0 OR status = 'WARNING'
+ORDER BY run_id DESC;
+
+-- Enhanced error log with accurate field context
+SELECT error_timestamp, error_type, 
+       SUBSTR(error_message, 1, 80) as error_summary,
+       SUBSTR(raw_data, 1, 100) as field_context
+FROM ETL_ERROR_LOG 
+WHERE error_timestamp > SYSDATE - 1/24
+ORDER BY error_timestamp DESC;
 ```
 
 #### Check Configuration
@@ -337,7 +354,25 @@ SELECT PKG_ETL_VALIDATION.safe_to_number(
   3. Don't skip error checking - Always check ETL_ERROR_LOG
   4. Don't try to give TR2000_STAGING direct API access - Use proxy
 
-  
+### 🆕 Enhanced Error Tracking (v2.1)
+
+**Recent Improvements:**
+- **Accurate Field Context**: Error log now shows exact field name, table, and record ID
+- **Failure Statistics**: ETL_STATISTICS tracks conversion failures with WARNING status  
+- **Session Counters**: Can monitor conversion failure rates in real-time
+
+**Example Enhanced Error Message:**
+```
+Error Type: DATA_CONVERSION_INVALID_NUMBER
+Field: LongWeldEff, Table: STG_PCS_HEADER_PROPERTIES, ID: AD100
+Value: "24" and less = 0,80, Above 24" = 1,0"
+```
+
+**ETL Statistics with Failures:**
+- **Status**: `WARNING` (instead of `SUCCESS`) when conversion failures occur
+- **records_failed**: Shows exact count of failed conversions
+- **Operational Impact**: Operations teams see accurate failure rates
+
 ---
 
 ## 🔒 Security Notes
