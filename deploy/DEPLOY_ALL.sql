@@ -127,6 +127,9 @@ PROMPT Deploying PKG_ETL_TEST_UTILS...
 PROMPT Deploying PKG_INDEPENDENT_ETL_CONTROL...
 @@04_packages/PKG_INDEPENDENT_ETL_CONTROL.sql
 
+PROMPT Deploying PKG_DDL_BACKUP (Database backup to DDL_BACKUP_OWNER)...
+@@04_packages/PKG_DDL_BACKUP.sql
+
 -- =====================================================
 -- STEP 6: Deploy Procedures
 -- =====================================================

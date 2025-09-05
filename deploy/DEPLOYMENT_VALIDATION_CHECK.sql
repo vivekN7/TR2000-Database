@@ -66,9 +66,10 @@ INSERT INTO temp_deployment_check VALUES ('TABLE', 'PCS_VALVE_ELEMENTS', 'EXISTS
 INSERT INTO temp_deployment_check VALUES ('TABLE', 'PCS_LIST', 'EXISTS', NULL, 'PENDING');
 INSERT INTO temp_deployment_check VALUES ('TABLE', 'VDS_LIST', 'EXISTS', NULL, 'PENDING');
 
--- Expected Packages (9 total)
+-- Expected Packages (10 total)
 INSERT INTO temp_deployment_check VALUES ('PACKAGE', 'PKG_API_CLIENT', 'VALID', NULL, 'PENDING');
 INSERT INTO temp_deployment_check VALUES ('PACKAGE', 'PKG_DATE_UTILS', 'VALID', NULL, 'PENDING');
+INSERT INTO temp_deployment_check VALUES ('PACKAGE', 'PKG_DDL_BACKUP', 'VALID', NULL, 'PENDING');
 INSERT INTO temp_deployment_check VALUES ('PACKAGE', 'PKG_ETL_LOGGING', 'VALID', NULL, 'PENDING');
 INSERT INTO temp_deployment_check VALUES ('PACKAGE', 'PKG_ETL_PROCESSOR', 'VALID', NULL, 'PENDING');
 INSERT INTO temp_deployment_check VALUES ('PACKAGE', 'PKG_ETL_TEST_UTILS', 'VALID', NULL, 'PENDING');
