@@ -1,7 +1,45 @@
-# TR2000 Database Operations Guide
+# TR2000 Database ETL System - Complete Guide
 
-Read this guide first, understand the proxy security model, and ALWAYS use safe conversions from PKG_ETL_VALIDATION.
+## 📋 System Overview
 
+This repository contains the complete database layer for the TR2000 API Data Manager ETL system. It handles extraction, transformation, and loading of piping specification data from Equinor's API endpoints into a structured Oracle database.
+
+### 🏗️ Architecture
+```
+API (Equinor) → API_SERVICE (Proxy) → RAW_JSON → STG_* Tables → Core Tables
+```
+
+**Security Model:**
+- **TR2000_STAGING**: Main schema (no direct API access)
+- **API_SERVICE**: Proxy user with APEX_WEB_SERVICE privileges  
+- All API calls tracked in `API_CALL_STATS`
+
+### 💡 Key System Features
+- **Enhanced Error Tracking (v2.1)**: Accurate field context and conversion failure statistics
+- **Safe Data Conversion**: PKG_ETL_VALIDATION handles invalid data gracefully
+- **Script-Based Deployment**: Complete version control with bulletproof drop/deploy
+- **Idempotent ETL**: Clear and reload strategy, safe to run multiple times
+- **Enterprise Monitoring**: Comprehensive logging with WARNING status for failures
+
+### 📈 Current Performance Metrics
+- **Plant**: GRANE 34/4.2
+- **Total Records**: 54,764 processed
+- **API Calls**: 30 per run  
+- **Execution Time**: ~11 seconds (main ETL), ~42 seconds (VDS catalog)
+- **Success Rate**: 99.998% (1 conversion error gracefully handled)
+- **Data Volume**: 605KB (main) + 28.68MB (VDS catalog)
+
+### 🏷️ Version Information
+- **Current Version**: v2.1 (2025-09-06)
+- **Status**: Production Ready with Enhanced Error Tracking
+- **Repository**: https://github.com/vivekN7/TR2000-Database
+- **Baseline**: `baseline-pre-refactor-20250105`
+
+---
+
+**⚠️ CRITICAL**: Read this guide first, understand the proxy security model, and ALWAYS use safe conversions from PKG_ETL_VALIDATION.
+
+---
 
 ## 📋 Table of Contents
 - [Quick Reference Commands](#-quick-reference-commands)
@@ -10,6 +48,31 @@ Read this guide first, understand the proxy security model, and ALWAYS use safe 
 - [Monitoring & Troubleshooting](#-monitoring--troubleshooting)
 - [Emergency Recovery](#-emergency-recovery)
 - [Process Guidelines](#-process-guidelines)
+
+---
+
+## 🚀 Quick Installation
+
+### Prerequisites
+- Oracle Database 21c XE or higher
+- SQL*Plus client
+- Git
+
+### Setup Steps
+1. **Clone repository**: `git clone https://github.com/vivekN7/TR2000-Database.git`
+2. **Create schema**: 
+   ```sql
+   sqlplus sys/password@localhost:1521/XEPDB1 as sysdba
+   CREATE USER TR2000_STAGING IDENTIFIED BY piping;
+   GRANT CONNECT, RESOURCE, UNLIMITED TABLESPACE TO TR2000_STAGING;
+   ```
+3. **Deploy system**: 
+   ```bash
+   cd deploy
+   sqlplus TR2000_STAGING/piping@localhost:1521/XEPDB1 @DEPLOY_ALL.sql
+   ```
+
+**⚠️ CRITICAL**: Always run deployment from the `deploy/` directory!
 
 ---
 
