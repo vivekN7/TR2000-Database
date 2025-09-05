@@ -25,94 +25,107 @@ PROMPT Press Ctrl+C to abort, Enter to continue...
 PAUSE
 
 -- =====================================================
--- STEP 1: Prerequisites (if API_SERVICE doesn't exist)
+-- OPTIONAL: Drop all objects first for clean deployment
 -- =====================================================
--- PROMPT Creating API_SERVICE user and proxy...
--- @@00_prerequisites/01_create_api_service_user.sql
--- @@00_prerequisites/02_grant_proxy_access.sql
+PROMPT
+PROMPT ========================================
+PROMPT Optional: Drop All Objects First?
+PROMPT ========================================
+PROMPT
+PROMPT To drop all objects first, run: @DROP_ALL_OBJECTS.sql
+PROMPT Otherwise, press Enter to continue with deployment...
+PAUSE
 
 -- =====================================================
--- STEP 2: Deploy Tables
+-- STEP 1: Deploy Tables
 -- =====================================================
 PROMPT
 PROMPT ========================================
 PROMPT Deploying Tables...
 PROMPT ========================================
 
--- Note: Tables should be deployed via existing snapshot for now
--- Future: Split into logical groups
--- @@01_tables/01_control_tables.sql
--- @@01_tables/02_audit_tables.sql
--- @@01_tables/03_staging_tables.sql
--- @@01_tables/04_reference_tables.sql
--- @@01_tables/05_pcs_detail_tables.sql
+PROMPT Deploying control tables...
+@@01_tables/01_control_tables.sql
 
-PROMPT Tables already exist - skipping table deployment
-PROMPT To recreate tables, run: @Database/Snapshots/snapshot_20250905_working_etl/01_tables.sql
+PROMPT Deploying audit tables...
+@@01_tables/02_audit_tables.sql
+
+PROMPT Deploying staging tables...
+@@01_tables/03_staging_tables.sql
+
+PROMPT Deploying reference tables...
+@@01_tables/04_reference_tables.sql
+
+PROMPT Deploying PCS detail tables...
+@@01_tables/05_pcs_detail_tables.sql
+
+PROMPT Deploying catalog tables...
+@@01_tables/06_catalog_tables.sql
 
 -- =====================================================
--- STEP 3: Deploy Sequences
+-- STEP 2: Deploy Sequences
 -- =====================================================
 PROMPT
 PROMPT ========================================
 PROMPT Deploying Sequences...
 PROMPT ========================================
 
--- Note: Sequences already exist
--- @@02_sequences/all_sequences.sql
-
-PROMPT Sequences already exist - skipping sequence deployment
-PROMPT To recreate sequences, run: @Database/Snapshots/snapshot_20250905_working_etl/02_sequences.sql
+@@02_sequences/all_sequences.sql
 
 -- =====================================================
--- STEP 4: Deploy Indexes
+-- STEP 3: Deploy Indexes
 -- =====================================================
 PROMPT
 PROMPT ========================================
 PROMPT Deploying Indexes...
 PROMPT ========================================
 
--- Note: Indexes already exist
--- @@03_indexes/all_indexes.sql
-
-PROMPT Indexes already exist - skipping index deployment
-PROMPT To recreate indexes, run: @Database/Snapshots/snapshot_20250905_working_etl/03_indexes.sql
+@@03_indexes/all_indexes.sql
 
 -- =====================================================
--- STEP 5: Deploy Packages (MAIN DEPLOYMENT)
+-- STEP 4: Deploy Views
+-- =====================================================
+PROMPT
+PROMPT ========================================
+PROMPT Deploying Views...
+PROMPT ========================================
+
+@@06_views/all_views.sql
+
+-- =====================================================
+-- STEP 5: Deploy Packages
 -- =====================================================
 PROMPT
 PROMPT ========================================
 PROMPT Deploying Packages...
 PROMPT ========================================
 
-PROMPT Deploying PKG_ETL_VALIDATION (NEW - Safe conversions)...
+PROMPT Deploying PKG_DATE_UTILS...
+@@04_packages/PKG_DATE_UTILS.sql
+
+PROMPT Deploying PKG_ETL_VALIDATION (Safe conversions)...
 @@04_packages/PKG_ETL_VALIDATION.sql
+
+PROMPT Deploying PKG_ETL_LOGGING...
+@@04_packages/PKG_ETL_LOGGING.sql
 
 PROMPT Deploying PKG_API_CLIENT...
 @@04_packages/PKG_API_CLIENT.sql
 
--- Future package deployments:
--- PROMPT Deploying PKG_DATE_UTILS...
--- @@04_packages/PKG_DATE_UTILS.sql
+PROMPT Deploying PKG_ETL_PROCESSOR...
+@@04_packages/PKG_ETL_PROCESSOR.sql
 
--- PROMPT Deploying PKG_ETL_LOGGING...
--- @@04_packages/PKG_ETL_LOGGING.sql
+PROMPT Deploying PKG_PCS_DETAIL_PROCESSOR...
+@@04_packages/PKG_PCS_DETAIL_PROCESSOR.sql
 
--- PROMPT Deploying PKG_ETL_PROCESSOR...
--- @@04_packages/PKG_ETL_PROCESSOR.sql
+PROMPT Deploying PKG_MAIN_ETL_CONTROL...
+@@04_packages/PKG_MAIN_ETL_CONTROL.sql
 
--- PROMPT Deploying PKG_PCS_DETAIL_PROCESSOR...
--- @@04_packages/PKG_PCS_DETAIL_PROCESSOR.sql
+PROMPT Deploying PKG_ETL_TEST_UTILS...
+@@04_packages/PKG_ETL_TEST_UTILS.sql
 
--- PROMPT Deploying PKG_MAIN_ETL_CONTROL...
--- @@04_packages/PKG_MAIN_ETL_CONTROL.sql
-
--- PROMPT Deploying PKG_ETL_TEST_UTILS...
--- @@04_packages/PKG_ETL_TEST_UTILS.sql
-
--- PROMPT Deploying PKG_INDEPENDENT_ETL_CONTROL...
--- @@04_packages/PKG_INDEPENDENT_ETL_CONTROL.sql
+PROMPT Deploying PKG_INDEPENDENT_ETL_CONTROL...
+@@04_packages/PKG_INDEPENDENT_ETL_CONTROL.sql
 
 -- =====================================================
 -- STEP 6: Deploy Procedures
@@ -122,45 +135,30 @@ PROMPT ========================================
 PROMPT Deploying Procedures...
 PROMPT ========================================
 
--- Note: Procedures already exist
--- @@05_procedures/FIX_EMBEDDED_NOTES_PARSER.sql
--- @@05_procedures/FIX_PCS_LIST_PARSER.sql
--- @@05_procedures/FIX_VDS_CATALOG_PARSER.sql
--- @@05_procedures/TEMP_FIX_VDS_PARSE.sql
+PROMPT Deploying FIX_EMBEDDED_NOTES_PARSER...
+@@05_procedures/FIX_EMBEDDED_NOTES_PARSER.sql
 
-PROMPT Procedures already exist - skipping procedure deployment
-PROMPT To recreate procedures, run: @Database/Snapshots/snapshot_20250905_working_etl/08_procedures.sql
+PROMPT Deploying FIX_PCS_LIST_PARSER...
+@@05_procedures/FIX_PCS_LIST_PARSER.sql
 
--- =====================================================
--- STEP 7: Deploy Views
--- =====================================================
-PROMPT
-PROMPT ========================================
-PROMPT Deploying Views...
-PROMPT ========================================
+PROMPT Deploying FIX_VDS_CATALOG_PARSER...
+@@05_procedures/FIX_VDS_CATALOG_PARSER.sql
 
--- Note: Views already exist
--- @@06_views/all_views.sql
-
-PROMPT Views already exist - skipping view deployment
-PROMPT To recreate views, run: @Database/Snapshots/snapshot_20250905_working_etl/04_views.sql
+PROMPT Deploying TEMP_FIX_VDS_PARSE...
+@@05_procedures/TEMP_FIX_VDS_PARSE.sql
 
 -- =====================================================
--- STEP 8: Load Control Data
+-- STEP 7: Load Control Data
 -- =====================================================
 PROMPT
 PROMPT ========================================
 PROMPT Loading Control Data...
 PROMPT ========================================
 
--- Note: Control data already loaded
--- @@07_control_data/load_control_data.sql
-
-PROMPT Control data already loaded - skipping
-PROMPT To reload control data, run: @Database/Snapshots/snapshot_20250905_working_etl/10_control_data.sql
+@@07_control_data/load_control_data.sql
 
 -- =====================================================
--- STEP 9: Compile Invalid Objects
+-- STEP 8: Compile Invalid Objects
 -- =====================================================
 PROMPT
 PROMPT ========================================
@@ -197,14 +195,25 @@ END;
 /
 
 -- =====================================================
--- STEP 10: Verify Deployment
+-- STEP 9: Verify Deployment
 -- =====================================================
 PROMPT
 PROMPT ========================================
 PROMPT Deployment Verification
 PROMPT ========================================
 
+-- Object counts
+PROMPT
+PROMPT Object Counts:
+SELECT object_type, COUNT(*) as count
+FROM user_objects
+WHERE object_type IN ('TABLE', 'SEQUENCE', 'PACKAGE', 'PACKAGE BODY', 'PROCEDURE', 'VIEW', 'TRIGGER')
+GROUP BY object_type
+ORDER BY object_type;
+
 -- Check for invalid objects
+PROMPT
+PROMPT Invalid Objects:
 SELECT object_type, object_name, status
 FROM user_objects
 WHERE status = 'INVALID'
@@ -220,18 +229,35 @@ WHERE object_type = 'PACKAGE'
 AND object_name LIKE 'PKG_%'
 ORDER BY object_name;
 
+-- Control data verification
+PROMPT
+PROMPT Control Data:
+SELECT 'ETL_FILTER' as table_name, COUNT(*) as rows FROM ETL_FILTER
+UNION ALL
+SELECT 'CONTROL_SETTINGS', COUNT(*) FROM CONTROL_SETTINGS
+UNION ALL
+SELECT 'CONTROL_ENDPOINTS', COUNT(*) FROM CONTROL_ENDPOINTS;
+
 PROMPT
 PROMPT ========================================
 PROMPT Deployment Complete!
 PROMPT ========================================
 PROMPT
-PROMPT Key improvements deployed:
+PROMPT Summary:
+PROMPT - 41 Tables deployed
+PROMPT - 28 Sequences deployed  
+PROMPT - 9 Packages deployed (including PKG_ETL_VALIDATION)
+PROMPT - 4 Procedures deployed
+PROMPT - 9 Views deployed
+PROMPT - Control data loaded
+PROMPT
+PROMPT Key improvements:
 PROMPT - PKG_ETL_VALIDATION: Safe data conversions with error logging
-PROMPT - PKG_API_CLIENT: Clean deployment version
+PROMPT - Complete deployment from scripts (no direct DB edits)
 PROMPT
 PROMPT Next steps:
-PROMPT 1. Test ETL with: EXEC PKG_MAIN_ETL_CONTROL.run_main_etl;
-PROMPT 2. Check conversion errors: SELECT * FROM ETL_ERROR_LOG WHERE error_type LIKE 'DATA_CONVERSION_%';
+PROMPT 1. Test ETL: EXEC PKG_MAIN_ETL_CONTROL.run_main_etl;
+PROMPT 2. Check errors: SELECT * FROM ETL_ERROR_LOG ORDER BY error_timestamp DESC;
 PROMPT 3. Get stats: SELECT PKG_ETL_VALIDATION.get_conversion_stats FROM dual;
 PROMPT
 PROMPT ========================================
