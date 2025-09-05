@@ -83,12 +83,19 @@ CREATE OR REPLACE PACKAGE PKG_ETL_VALIDATION AS
     FUNCTION get_conversion_stats(
         p_run_id NUMBER DEFAULT NULL
     ) RETURN VARCHAR2;
+    
+    -- Conversion failure counter for current session
+    PROCEDURE reset_conversion_failures;
+    FUNCTION get_conversion_failures RETURN NUMBER;
 
 END PKG_ETL_VALIDATION;
 /
 
 -- Create package body
 CREATE OR REPLACE PACKAGE BODY PKG_ETL_VALIDATION AS
+
+    -- Package variable to track conversion failures in current session
+    g_conversion_failures NUMBER := 0;
 
     -- Safe number conversion with logging
     FUNCTION safe_to_number(
@@ -123,6 +130,8 @@ CREATE OR REPLACE PACKAGE BODY PKG_ETL_VALIDATION AS
                     p_record_id    => p_record_id,
                     p_error_msg    => 'Value is not a valid number format'
                 );
+                -- Increment failure counter
+                g_conversion_failures := g_conversion_failures + 1;
                 RETURN p_default;
             END IF;
         END;
@@ -137,6 +146,8 @@ CREATE OR REPLACE PACKAGE BODY PKG_ETL_VALIDATION AS
                 p_record_id    => p_record_id,
                 p_error_msg    => SQLERRM
             );
+            -- Increment failure counter
+            g_conversion_failures := g_conversion_failures + 1;
             RETURN p_default;
         WHEN OTHERS THEN
             -- Log unexpected error
@@ -148,6 +159,8 @@ CREATE OR REPLACE PACKAGE BODY PKG_ETL_VALIDATION AS
                 p_record_id    => p_record_id,
                 p_error_msg    => SQLERRM
             );
+            -- Increment failure counter
+            g_conversion_failures := g_conversion_failures + 1;
             RETURN p_default;
     END safe_to_number;
     
@@ -439,6 +452,18 @@ CREATE OR REPLACE PACKAGE BODY PKG_ETL_VALIDATION AS
                    
         RETURN v_stats;
     END get_conversion_stats;
+    
+    -- Reset conversion failure counter
+    PROCEDURE reset_conversion_failures IS
+    BEGIN
+        g_conversion_failures := 0;
+    END reset_conversion_failures;
+    
+    -- Get current conversion failure count
+    FUNCTION get_conversion_failures RETURN NUMBER IS
+    BEGIN
+        RETURN g_conversion_failures;
+    END get_conversion_failures;
 
 END PKG_ETL_VALIDATION;
 /

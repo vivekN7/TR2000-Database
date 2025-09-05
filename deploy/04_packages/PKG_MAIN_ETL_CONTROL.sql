@@ -49,6 +49,9 @@ CREATE OR REPLACE PACKAGE BODY PKG_MAIN_ETL_CONTROL AS
             p_initiated_by => USER
         );
         PKG_ETL_LOGGING.set_current_run_id(v_run_id);
+        
+        -- Reset conversion failure counter at start of ETL
+        PKG_ETL_VALIDATION.reset_conversion_failures();
 
         DBMS_OUTPUT.PUT_LINE('Starting full ETL run');
         DBMS_OUTPUT.PUT_LINE('Batch ID: ' || v_batch_id);
@@ -71,6 +74,27 @@ CREATE OR REPLACE PACKAGE BODY PKG_MAIN_ETL_CONTROL AS
 
         DBMS_OUTPUT.PUT_LINE('Processing PCS details...');
         process_pcs_details;
+
+        -- Log conversion failure statistics
+        DECLARE
+            v_conversion_failures NUMBER;
+            v_stat_id NUMBER;
+        BEGIN
+            v_conversion_failures := PKG_ETL_VALIDATION.get_conversion_failures();
+            
+            -- Log summary statistics with conversion failures
+            v_stat_id := PKG_ETL_LOGGING.log_operation_start(
+                p_run_id => v_run_id,
+                p_stat_type => 'SUMMARY',
+                p_operation_name => 'ETL Run Summary'
+            );
+            
+            PKG_ETL_LOGGING.log_operation_end(
+                p_stat_id => v_stat_id,
+                p_status => CASE WHEN v_conversion_failures > 0 THEN 'WARNING' ELSE 'SUCCESS' END,
+                p_records_failed => v_conversion_failures
+            );
+        END;
 
         PKG_ETL_LOGGING.end_etl_run(
             p_run_id => v_run_id,

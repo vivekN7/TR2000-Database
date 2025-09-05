@@ -50,6 +50,9 @@ CREATE OR REPLACE PACKAGE BODY PKG_PCS_DETAIL_PROCESSOR AS
             -- ===== HEADER_PROPERTIES Handler =====
             -- RAW_JSON → STG_PCS_HEADER_PROPERTIES
             -- No DELETE needed - tables cleared at ETL start
+            
+            -- Reset conversion failure counter for this operation
+            PKG_ETL_VALIDATION.reset_conversion_failures();
 
             INSERT INTO STG_PCS_HEADER_PROPERTIES (
                 plant_id, pcs_name, pcs_revision,
@@ -202,33 +205,33 @@ CREATE OR REPLACE PACKAGE BODY PKG_PCS_DETAIL_PROCESSOR AS
             SELECT
                 SYS_GUID(), plant_id, pcs_name, pcs_revision,
                 "PCS", "Revision", "Status", PKG_DATE_UTILS.safe_parse_date("RevDate"),
-                "RatingClass", PKG_ETL_VALIDATION.safe_to_number("TestPressure"), "MaterialGroup", "DesignCode",
+                "RatingClass", PKG_ETL_VALIDATION.safe_to_number("TestPressure", NULL, 'STG_PCS_HEADER_PROPERTIES', 'TestPressure', "PCS"), "MaterialGroup", "DesignCode",
                 PKG_DATE_UTILS.safe_parse_date("LastUpdate"), "LastUpdateBy", "Approver", "Notepad",
                 "SC", "VSM", "DesignCodeRevMark",
-                PKG_ETL_VALIDATION.safe_to_number("CorrAllowance"), "CorrAllowanceRevMark",
-                PKG_ETL_VALIDATION.safe_to_number("LongWeldEff"), "LongWeldEffRevMark",
+                PKG_ETL_VALIDATION.safe_to_number("CorrAllowance", NULL, 'STG_PCS_HEADER_PROPERTIES', 'CorrAllowance', "PCS"), "CorrAllowanceRevMark",
+                PKG_ETL_VALIDATION.safe_to_number("LongWeldEff", NULL, 'STG_PCS_HEADER_PROPERTIES', 'LongWeldEff', "PCS"), "LongWeldEffRevMark",
                 "WallThkTol", "WallThkTolRevMark",
                 "ServiceRemark", "ServiceRemarkRevMark",
-                PKG_ETL_VALIDATION.safe_to_number("DesignPress01"), PKG_ETL_VALIDATION.safe_to_number("DesignPress02"),
-                PKG_ETL_VALIDATION.safe_to_number("DesignPress03"), PKG_ETL_VALIDATION.safe_to_number("DesignPress04"),
-                PKG_ETL_VALIDATION.safe_to_number("DesignPress05"), PKG_ETL_VALIDATION.safe_to_number("DesignPress06"),
-                PKG_ETL_VALIDATION.safe_to_number("DesignPress07"), PKG_ETL_VALIDATION.safe_to_number("DesignPress08"),
-                PKG_ETL_VALIDATION.safe_to_number("DesignPress09"), PKG_ETL_VALIDATION.safe_to_number("DesignPress10"),
-                PKG_ETL_VALIDATION.safe_to_number("DesignPress11"), PKG_ETL_VALIDATION.safe_to_number("DesignPress12"),
+                PKG_ETL_VALIDATION.safe_to_number("DesignPress01", NULL, 'STG_PCS_HEADER_PROPERTIES', 'DesignPress01', "PCS"), PKG_ETL_VALIDATION.safe_to_number("DesignPress02", NULL, 'STG_PCS_HEADER_PROPERTIES', 'DesignPress02', "PCS"),
+                PKG_ETL_VALIDATION.safe_to_number("DesignPress03", NULL, 'STG_PCS_HEADER_PROPERTIES', 'DesignPress03', "PCS"), PKG_ETL_VALIDATION.safe_to_number("DesignPress04", NULL, 'STG_PCS_HEADER_PROPERTIES', 'DesignPress04', "PCS"),
+                PKG_ETL_VALIDATION.safe_to_number("DesignPress05", NULL, 'STG_PCS_HEADER_PROPERTIES', 'DesignPress05', "PCS"), PKG_ETL_VALIDATION.safe_to_number("DesignPress06", NULL, 'STG_PCS_HEADER_PROPERTIES', 'DesignPress06', "PCS"),
+                PKG_ETL_VALIDATION.safe_to_number("DesignPress07", NULL, 'STG_PCS_HEADER_PROPERTIES', 'DesignPress07', "PCS"), PKG_ETL_VALIDATION.safe_to_number("DesignPress08", NULL, 'STG_PCS_HEADER_PROPERTIES', 'DesignPress08', "PCS"),
+                PKG_ETL_VALIDATION.safe_to_number("DesignPress09", NULL, 'STG_PCS_HEADER_PROPERTIES', 'DesignPress09', "PCS"), PKG_ETL_VALIDATION.safe_to_number("DesignPress10", NULL, 'STG_PCS_HEADER_PROPERTIES', 'DesignPress10', "PCS"),
+                PKG_ETL_VALIDATION.safe_to_number("DesignPress11", NULL, 'STG_PCS_HEADER_PROPERTIES', 'DesignPress11', "PCS"), PKG_ETL_VALIDATION.safe_to_number("DesignPress12", NULL, 'STG_PCS_HEADER_PROPERTIES', 'DesignPress12', "PCS"),
                 "DesignPressRevMark",
-                PKG_ETL_VALIDATION.safe_to_number("DesignTemp01"), PKG_ETL_VALIDATION.safe_to_number("DesignTemp02"),
-                PKG_ETL_VALIDATION.safe_to_number("DesignTemp03"), PKG_ETL_VALIDATION.safe_to_number("DesignTemp04"),
-                PKG_ETL_VALIDATION.safe_to_number("DesignTemp05"), PKG_ETL_VALIDATION.safe_to_number("DesignTemp06"),
-                PKG_ETL_VALIDATION.safe_to_number("DesignTemp07"), PKG_ETL_VALIDATION.safe_to_number("DesignTemp08"),
-                PKG_ETL_VALIDATION.safe_to_number("DesignTemp09"), PKG_ETL_VALIDATION.safe_to_number("DesignTemp10"),
-                PKG_ETL_VALIDATION.safe_to_number("DesignTemp11"), PKG_ETL_VALIDATION.safe_to_number("DesignTemp12"),
+                PKG_ETL_VALIDATION.safe_to_number("DesignTemp01", NULL, 'STG_PCS_HEADER_PROPERTIES', 'DesignTemp01', "PCS"), PKG_ETL_VALIDATION.safe_to_number("DesignTemp02", NULL, 'STG_PCS_HEADER_PROPERTIES', 'DesignTemp02', "PCS"),
+                PKG_ETL_VALIDATION.safe_to_number("DesignTemp03", NULL, 'STG_PCS_HEADER_PROPERTIES', 'DesignTemp03', "PCS"), PKG_ETL_VALIDATION.safe_to_number("DesignTemp04", NULL, 'STG_PCS_HEADER_PROPERTIES', 'DesignTemp04', "PCS"),
+                PKG_ETL_VALIDATION.safe_to_number("DesignTemp05", NULL, 'STG_PCS_HEADER_PROPERTIES', 'DesignTemp05', "PCS"), PKG_ETL_VALIDATION.safe_to_number("DesignTemp06", NULL, 'STG_PCS_HEADER_PROPERTIES', 'DesignTemp06', "PCS"),
+                PKG_ETL_VALIDATION.safe_to_number("DesignTemp07", NULL, 'STG_PCS_HEADER_PROPERTIES', 'DesignTemp07', "PCS"), PKG_ETL_VALIDATION.safe_to_number("DesignTemp08", NULL, 'STG_PCS_HEADER_PROPERTIES', 'DesignTemp08', "PCS"),
+                PKG_ETL_VALIDATION.safe_to_number("DesignTemp09", NULL, 'STG_PCS_HEADER_PROPERTIES', 'DesignTemp09', "PCS"), PKG_ETL_VALIDATION.safe_to_number("DesignTemp10", NULL, 'STG_PCS_HEADER_PROPERTIES', 'DesignTemp10', "PCS"),
+                PKG_ETL_VALIDATION.safe_to_number("DesignTemp11", NULL, 'STG_PCS_HEADER_PROPERTIES', 'DesignTemp11', "PCS"), PKG_ETL_VALIDATION.safe_to_number("DesignTemp12", NULL, 'STG_PCS_HEADER_PROPERTIES', 'DesignTemp12', "PCS"),
                 "DesignTempRevMark",
                 "NoteIDCorrAllowance", "NoteIDServiceCode", "NoteIDWallThkTol",
                 "NoteIDLongWeldEff", "NoteIDGeneralPCS", "NoteIDDesignCode",
                 "NoteIDPressTempTable", "NoteIDPipeSizeWthTable",
                 "PressElementChange", "TempElementChange",
-                PKG_ETL_VALIDATION.safe_to_number("MaterialGroupID"), PKG_ETL_VALIDATION.safe_to_number("SpecialReqID"), "SpecialReq",
-                "NewVDSSection", "TubePCS", "EDSMJMatrix", PKG_ETL_VALIDATION.safe_to_number("MJReductionFactor"),
+                PKG_ETL_VALIDATION.safe_to_number("MaterialGroupID", NULL, 'STG_PCS_HEADER_PROPERTIES', 'MaterialGroupID', "PCS"), PKG_ETL_VALIDATION.safe_to_number("SpecialReqID", NULL, 'STG_PCS_HEADER_PROPERTIES', 'SpecialReqID', "PCS"), "SpecialReq",
+                "NewVDSSection", "TubePCS", "EDSMJMatrix", PKG_ETL_VALIDATION.safe_to_number("MJReductionFactor", NULL, 'STG_PCS_HEADER_PROPERTIES', 'MJReductionFactor', "PCS"),
                 SYSDATE, SYSDATE
             FROM STG_PCS_HEADER_PROPERTIES
             WHERE plant_id = p_plant_id
