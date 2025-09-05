@@ -1,12 +1,18 @@
--- All Sequences
--- Generated from database
+-- All Sequences for TR2000 ETL System
+-- Most tables use IDENTITY columns, so minimal sequences needed
 
-ERROR:
-ORA-31603: object "ISEQ$$_98025" of type SEQUENCE not found in schema "TR2000_STAGING"
-ORA-06512: at "SYS.DBMS_METADATA", line 6781
-ORA-06512: at "SYS.DBMS_SYS_ERROR", line 105
-ORA-06512: at "SYS.DBMS_METADATA", line 6768
-ORA-06512: at "SYS.DBMS_METADATA", line 9815
-ORA-06512: at line 1
+-- Note: Tables with IDENTITY columns (auto-generated sequences):
+-- - ETL_FILTER (filter_id)
+-- - CONTROL_ENDPOINTS (endpoint_id) 
+-- - ETL_ERROR_LOG (error_id)
+-- - ETL_RUN_LOG (run_id)
+-- - ETL_STATISTICS (stat_id)
+-- - RAW_JSON (raw_json_id)
+-- - All reference tables (*_REFERENCES_GUID uses SYS_GUID())
+-- - All PCS detail tables (*_GUID uses SYS_GUID()) 
+-- - All catalog tables (*_GUID uses SYS_GUID())
 
+-- Only create sequences if explicitly needed for custom logic
+-- Currently, all tables use IDENTITY columns or SYS_GUID() defaults
 
+PROMPT No manual sequences required - all tables use IDENTITY columns or SYS_GUID();

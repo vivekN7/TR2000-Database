@@ -103,15 +103,12 @@ CREATE OR REPLACE EDITIONABLE PACKAGE BODY "TR2000_STAGING"."PKG_ETL_LOGGING" AS
     ) RETURN NUMBER IS
         v_run_id NUMBER;
     BEGIN
-        -- Get next run_id
-        SELECT ETL_RUN_SEQ.NEXTVAL INTO v_run_id FROM DUAL;
-
-        -- Insert into ETL_RUN_LOG
+        -- Insert into ETL_RUN_LOG (uses IDENTITY column for run_id)
         INSERT INTO ETL_RUN_LOG (
-            run_id, run_type, start_time, status, initiated_by
+            run_type, start_time, status, initiated_by
         ) VALUES (
-            v_run_id, p_run_type, SYSTIMESTAMP, 'RUNNING', p_initiated_by
-        );
+            p_run_type, SYSTIMESTAMP, 'RUNNING', p_initiated_by
+        ) RETURNING run_id INTO v_run_id;
 
         -- Store run_id in package variable
         g_current_run_id := v_run_id;
@@ -210,7 +207,7 @@ CREATE OR REPLACE EDITIONABLE PACKAGE BODY "TR2000_STAGING"."PKG_ETL_LOGGING" AS
             error_timestamp, error_type, error_code, error_message,
             error_stack, raw_data
         ) VALUES (
-            ETL_ERROR_SEQ.NEXTVAL, p_endpoint_key, p_plant_id, p_issue_revision,
+            DEFAULT, p_endpoint_key, p_plant_id, p_issue_revision,  -- Uses IDENTITY column
             SYSTIMESTAMP, p_error_type, p_error_code, p_error_message,
             p_error_stack, p_raw_data
         );
@@ -361,15 +358,12 @@ END PKG_ETL_LOGGING;
     ) RETURN NUMBER IS
         v_run_id NUMBER;
     BEGIN
-        -- Get next run_id
-        SELECT ETL_RUN_SEQ.NEXTVAL INTO v_run_id FROM DUAL;
-
-        -- Insert into ETL_RUN_LOG
+        -- Insert into ETL_RUN_LOG (uses IDENTITY column for run_id)
         INSERT INTO ETL_RUN_LOG (
-            run_id, run_type, start_time, status, initiated_by
+            run_type, start_time, status, initiated_by
         ) VALUES (
-            v_run_id, p_run_type, SYSTIMESTAMP, 'RUNNING', p_initiated_by
-        );
+            p_run_type, SYSTIMESTAMP, 'RUNNING', p_initiated_by
+        ) RETURNING run_id INTO v_run_id;
 
         -- Store run_id in package variable
         g_current_run_id := v_run_id;
@@ -468,7 +462,7 @@ END PKG_ETL_LOGGING;
             error_timestamp, error_type, error_code, error_message,
             error_stack, raw_data
         ) VALUES (
-            ETL_ERROR_SEQ.NEXTVAL, p_endpoint_key, p_plant_id, p_issue_revision,
+            DEFAULT, p_endpoint_key, p_plant_id, p_issue_revision,  -- Uses IDENTITY column
             SYSTIMESTAMP, p_error_type, p_error_code, p_error_message,
             p_error_stack, p_raw_data
         );

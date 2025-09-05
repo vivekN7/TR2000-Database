@@ -302,7 +302,7 @@ CREATE OR REPLACE PACKAGE BODY PKG_ETL_VALIDATION AS
                 error_message,
                 raw_data
             ) VALUES (
-                ETL_ERROR_SEQ.NEXTVAL,
+                DEFAULT,  -- Uses IDENTITY column
                 p_table_name,
                 SYSTIMESTAMP,
                 'ROW_COUNT_MISMATCH',
@@ -374,7 +374,7 @@ CREATE OR REPLACE PACKAGE BODY PKG_ETL_VALIDATION AS
             error_message,
             raw_data
         ) VALUES (
-            ETL_ERROR_SEQ.NEXTVAL,
+            DEFAULT,  -- Uses IDENTITY column
             p_source_table,
             p_source_field,
             p_record_id,

@@ -539,7 +539,7 @@ CREATE OR REPLACE EDITIONABLE PACKAGE BODY "TR2000_STAGING"."PKG_PCS_DETAIL_PROC
                 error_timestamp, error_type, error_code,
                 error_message, raw_data
             ) VALUES (
-                ETL_ERROR_SEQ.NEXTVAL,
+                DEFAULT,  -- Uses IDENTITY column
                 'PCS_' || v_upper_type,
                 p_plant_id,
                 SYSTIMESTAMP,
@@ -1075,7 +1075,7 @@ END PKG_PCS_DETAIL_PROCESSOR;
                 error_timestamp, error_type, error_code,
                 error_message, raw_data
             ) VALUES (
-                ETL_ERROR_SEQ.NEXTVAL,
+                DEFAULT,  -- Uses IDENTITY column
                 'PCS_' || v_upper_type,
                 p_plant_id,
                 SYSTIMESTAMP,

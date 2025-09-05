@@ -179,7 +179,7 @@ CREATE OR REPLACE PACKAGE BODY PKG_API_CLIENT AS
             created_date,
             key_fingerprint
         ) VALUES (
-            RAW_JSON_SEQ.NEXTVAL,
+            DEFAULT,  -- Uses IDENTITY column
             v_endpoint_key,
             v_template,
             v_path,
@@ -202,7 +202,7 @@ CREATE OR REPLACE PACKAGE BODY PKG_API_CLIENT AS
                 error_code,
                 error_message
             ) VALUES (
-                ETL_ERROR_SEQ.NEXTVAL,
+                DEFAULT,  -- Uses IDENTITY column
                 v_endpoint_key,
                 p_plant_id,
                 p_issue_revision,
@@ -233,7 +233,7 @@ CREATE OR REPLACE PACKAGE BODY PKG_API_CLIENT AS
                     error_code,
                     error_message
                 ) VALUES (
-                    ETL_ERROR_SEQ.NEXTVAL,
+                    DEFAULT,  -- Uses IDENTITY column
                     v_endpoint_key,
                     p_plant_id,
                     p_issue_revision,
@@ -302,7 +302,7 @@ CREATE OR REPLACE PACKAGE BODY PKG_API_CLIENT AS
             created_date,
             key_fingerprint
         ) VALUES (
-            RAW_JSON_SEQ.NEXTVAL,
+            DEFAULT,  -- Uses IDENTITY column
             'PCS_LIST',
             '/plants/{plant_id}/pcs',
             v_path,
@@ -324,7 +324,7 @@ CREATE OR REPLACE PACKAGE BODY PKG_API_CLIENT AS
                 error_code,
                 error_message
             ) VALUES (
-                ETL_ERROR_SEQ.NEXTVAL,
+                DEFAULT,  -- Uses IDENTITY column
                 'PCS_LIST',
                 p_plant_id,
                 SYSTIMESTAMP,
@@ -353,7 +353,7 @@ CREATE OR REPLACE PACKAGE BODY PKG_API_CLIENT AS
                     error_code,
                     error_message
                 ) VALUES (
-                    ETL_ERROR_SEQ.NEXTVAL,
+                    DEFAULT,  -- Uses IDENTITY column
                     'PCS_LIST',
                     p_plant_id,
                     SYSTIMESTAMP,
@@ -434,7 +434,7 @@ CREATE OR REPLACE PACKAGE BODY PKG_API_CLIENT AS
             created_date,
             key_fingerprint
         ) VALUES (
-            RAW_JSON_SEQ.NEXTVAL,
+            DEFAULT,  -- Uses IDENTITY column
             v_endpoint_key,
             v_template,
             v_path,
@@ -457,7 +457,7 @@ CREATE OR REPLACE PACKAGE BODY PKG_API_CLIENT AS
                 error_code,
                 error_message
             ) VALUES (
-                ETL_ERROR_SEQ.NEXTVAL,
+                DEFAULT,  -- Uses IDENTITY column
                 v_endpoint_key,
                 p_plant_id,
                 p_pcs_name,  -- Store PCS name in issue_revision column
@@ -488,7 +488,7 @@ CREATE OR REPLACE PACKAGE BODY PKG_API_CLIENT AS
                     error_code,
                     error_message
                 ) VALUES (
-                    ETL_ERROR_SEQ.NEXTVAL,
+                    DEFAULT,  -- Uses IDENTITY column
                     v_endpoint_key,
                     p_plant_id,
                     p_pcs_name,  -- Store PCS name in issue_revision column
@@ -549,7 +549,7 @@ CREATE OR REPLACE PACKAGE BODY PKG_API_CLIENT AS
             created_date,
             key_fingerprint
         ) VALUES (
-            RAW_JSON_SEQ.NEXTVAL,
+            DEFAULT,  -- Uses IDENTITY column
             'VDS_LIST',
             '/vds',
             '/vds',
@@ -570,7 +570,7 @@ CREATE OR REPLACE PACKAGE BODY PKG_API_CLIENT AS
                 error_code,
                 error_message
             ) VALUES (
-                ETL_ERROR_SEQ.NEXTVAL,
+                DEFAULT,  -- Uses IDENTITY column
                 'VDS_LIST',
                 SYSTIMESTAMP,
                 'API_CALL_ERROR',
@@ -597,7 +597,7 @@ CREATE OR REPLACE PACKAGE BODY PKG_API_CLIENT AS
                     error_code,
                     error_message
                 ) VALUES (
-                    ETL_ERROR_SEQ.NEXTVAL,
+                    DEFAULT,  -- Uses IDENTITY column
                     'VDS_LIST',
                     SYSTIMESTAMP,
                     'UNEXPECTED_ERROR',
