@@ -1,0 +1,41 @@
+# Database-specific gitignore
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.bak
+*~
+
+# Log files
+*.log
+*.lst
+
+# Oracle Data Pump files (large binary files)
+*.dmp
+*.exp
+*.imp
+
+# SQL*Plus spool files
+*.lst
+*.out
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+
+# Sensitive files (if any)
+*.credentials
+*.password
+
+# Large data exports (keep structure, not data)
+data_exports/
+large_exports/
+
+# But keep important backups
+!backups/20250105_pre_refactor/
+!backups/scripts/
