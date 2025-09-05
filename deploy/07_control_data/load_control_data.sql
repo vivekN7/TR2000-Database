@@ -81,7 +81,7 @@ VALUES ('PCS_EMBEDDED_NOTES', '/plants/{plant_id}/pcs/{pcs_name}/rev/{pcs_revisi
 COMMIT;
 
 -- Verification
-SELECT 'ETL_FILTER' as table_name, COUNT(*) as rows FROM ETL_FILTER
+SELECT 'ETL_FILTER' as table_name, COUNT(*) as row_count FROM ETL_FILTER
 UNION ALL
 SELECT 'CONTROL_SETTINGS', COUNT(*) FROM CONTROL_SETTINGS  
 UNION ALL

@@ -43,6 +43,10 @@ PROMPT
 PROMPT ========================================
 PROMPT Deploying Tables...
 PROMPT ========================================
+PROMPT
+PROMPT Note: Allowing DROP errors for clean deployment...
+-- Temporarily allow errors (tables may not exist on clean deployment)
+WHENEVER SQLERROR CONTINUE
 
 PROMPT Deploying control tables...
 @@01_tables/01_control_tables.sql
@@ -138,17 +142,13 @@ PROMPT ========================================
 PROMPT Deploying Procedures...
 PROMPT ========================================
 
-PROMPT Deploying FIX_EMBEDDED_NOTES_PARSER...
-@@05_procedures/FIX_EMBEDDED_NOTES_PARSER.sql
+-- Note: Temporary fix procedures archived to archive/temp_fix_procedures_20250906/
+-- These were development artifacts and are no longer needed for production deployment
 
-PROMPT Deploying FIX_PCS_LIST_PARSER...
-@@05_procedures/FIX_PCS_LIST_PARSER.sql
-
-PROMPT Deploying FIX_VDS_CATALOG_PARSER...
-@@05_procedures/FIX_VDS_CATALOG_PARSER.sql
-
-PROMPT Deploying TEMP_FIX_VDS_PARSE...
-@@05_procedures/TEMP_FIX_VDS_PARSE.sql
+-- Re-enable strict error checking for control data loading
+WHENEVER SQLERROR EXIT SQL.SQLCODE
+PROMPT
+PROMPT Re-enabled strict error checking for control data loading...
 
 -- =====================================================
 -- STEP 7: Load Control Data
@@ -235,7 +235,7 @@ ORDER BY object_name;
 -- Control data verification
 PROMPT
 PROMPT Control Data:
-SELECT 'ETL_FILTER' as table_name, COUNT(*) as rows FROM ETL_FILTER
+SELECT 'ETL_FILTER' as table_name, COUNT(*) as row_count FROM ETL_FILTER
 UNION ALL
 SELECT 'CONTROL_SETTINGS', COUNT(*) FROM CONTROL_SETTINGS
 UNION ALL

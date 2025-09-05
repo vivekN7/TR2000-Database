@@ -13,7 +13,7 @@ EXCEPTION WHEN OTHERS THEN IF SQLCODE != -4043 THEN RAISE; END IF; END;
 
 -- Create package specification
 
-  CREATE OR REPLACE PACKAGE PKG_ETL_PROCESSOR" AS
+  CREATE OR REPLACE PACKAGE PKG_ETL_PROCESSOR AS
     -- Parse individual reference types
     PROCEDURE parse_and_load_pcs_references(
         p_raw_json_id IN NUMBER,
@@ -89,7 +89,9 @@ EXCEPTION WHEN OTHERS THEN IF SQLCODE != -4043 THEN RAISE; END IF; END;
         p_raw_json_id IN NUMBER
     );
 END PKG_ETL_PROCESSOR;
-CREATE OR REPLACE PACKAGE BODY PKG_ETL_PROCESSOR" AS
+/
+
+CREATE OR REPLACE PACKAGE BODY PKG_ETL_PROCESSOR AS
 
     -- =====================================================
     -- PARSE AND LOAD PCS REFERENCES

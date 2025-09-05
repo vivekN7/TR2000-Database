@@ -13,7 +13,7 @@ EXCEPTION WHEN OTHERS THEN IF SQLCODE != -4043 THEN RAISE; END IF; END;
 
 -- Create package specification
 
-  CREATE OR REPLACE PACKAGE PKG_ETL_TEST_UTILS" AS
+  CREATE OR REPLACE PACKAGE PKG_ETL_TEST_UTILS AS
     -- Testing and development utilities package
     -- This package provides utilities for testing and development
     -- NOT for production use
@@ -46,7 +46,9 @@ EXCEPTION WHEN OTHERS THEN IF SQLCODE != -4043 THEN RAISE; END IF; END;
     );
 
 END PKG_ETL_TEST_UTILS;
-CREATE OR REPLACE PACKAGE BODY PKG_ETL_TEST_UTILS" AS
+/
+
+CREATE OR REPLACE PACKAGE BODY PKG_ETL_TEST_UTILS AS
 
     PROCEDURE clear_all_logs IS
     BEGIN

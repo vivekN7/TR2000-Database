@@ -13,7 +13,7 @@ EXCEPTION WHEN OTHERS THEN IF SQLCODE != -4043 THEN RAISE; END IF; END;
 
 -- Create package specification
 
-  CREATE OR REPLACE PACKAGE PKG_PCS_DETAIL_PROCESSOR" AS
+  CREATE OR REPLACE PACKAGE PKG_PCS_DETAIL_PROCESSOR AS
     PROCEDURE process_pcs_detail(
         p_raw_json_id   IN NUMBER,
         p_plant_id      IN VARCHAR2,
@@ -22,7 +22,9 @@ EXCEPTION WHEN OTHERS THEN IF SQLCODE != -4043 THEN RAISE; END IF; END;
         p_detail_type   IN VARCHAR2
     );
 END PKG_PCS_DETAIL_PROCESSOR;
-CREATE OR REPLACE PACKAGE BODY PKG_PCS_DETAIL_PROCESSOR" AS
+/
+
+CREATE OR REPLACE PACKAGE BODY PKG_PCS_DETAIL_PROCESSOR AS
 
     PROCEDURE process_pcs_detail(
         p_raw_json_id   IN NUMBER,
@@ -200,33 +202,33 @@ CREATE OR REPLACE PACKAGE BODY PKG_PCS_DETAIL_PROCESSOR" AS
             SELECT
                 SYS_GUID(), plant_id, pcs_name, pcs_revision,
                 "PCS", "Revision", "Status", PKG_DATE_UTILS.safe_parse_date("RevDate"),
-                "RatingClass", safe_to_number("TestPressure"), "MaterialGroup", "DesignCode",
+                "RatingClass", PKG_ETL_VALIDATION.safe_to_number("TestPressure"), "MaterialGroup", "DesignCode",
                 PKG_DATE_UTILS.safe_parse_date("LastUpdate"), "LastUpdateBy", "Approver", "Notepad",
                 "SC", "VSM", "DesignCodeRevMark",
-                safe_to_number("CorrAllowance"), "CorrAllowanceRevMark",
-                safe_to_number("LongWeldEff"), "LongWeldEffRevMark",
+                PKG_ETL_VALIDATION.safe_to_number("CorrAllowance"), "CorrAllowanceRevMark",
+                PKG_ETL_VALIDATION.safe_to_number("LongWeldEff"), "LongWeldEffRevMark",
                 "WallThkTol", "WallThkTolRevMark",
                 "ServiceRemark", "ServiceRemarkRevMark",
-                safe_to_number("DesignPress01"), safe_to_number("DesignPress02"),
-                safe_to_number("DesignPress03"), safe_to_number("DesignPress04"),
-                safe_to_number("DesignPress05"), safe_to_number("DesignPress06"),
-                safe_to_number("DesignPress07"), safe_to_number("DesignPress08"),
-                safe_to_number("DesignPress09"), safe_to_number("DesignPress10"),
-                safe_to_number("DesignPress11"), safe_to_number("DesignPress12"),
+                PKG_ETL_VALIDATION.safe_to_number("DesignPress01"), PKG_ETL_VALIDATION.safe_to_number("DesignPress02"),
+                PKG_ETL_VALIDATION.safe_to_number("DesignPress03"), PKG_ETL_VALIDATION.safe_to_number("DesignPress04"),
+                PKG_ETL_VALIDATION.safe_to_number("DesignPress05"), PKG_ETL_VALIDATION.safe_to_number("DesignPress06"),
+                PKG_ETL_VALIDATION.safe_to_number("DesignPress07"), PKG_ETL_VALIDATION.safe_to_number("DesignPress08"),
+                PKG_ETL_VALIDATION.safe_to_number("DesignPress09"), PKG_ETL_VALIDATION.safe_to_number("DesignPress10"),
+                PKG_ETL_VALIDATION.safe_to_number("DesignPress11"), PKG_ETL_VALIDATION.safe_to_number("DesignPress12"),
                 "DesignPressRevMark",
-                safe_to_number("DesignTemp01"), safe_to_number("DesignTemp02"),
-                safe_to_number("DesignTemp03"), safe_to_number("DesignTemp04"),
-                safe_to_number("DesignTemp05"), safe_to_number("DesignTemp06"),
-                safe_to_number("DesignTemp07"), safe_to_number("DesignTemp08"),
-                safe_to_number("DesignTemp09"), safe_to_number("DesignTemp10"),
-                safe_to_number("DesignTemp11"), safe_to_number("DesignTemp12"),
+                PKG_ETL_VALIDATION.safe_to_number("DesignTemp01"), PKG_ETL_VALIDATION.safe_to_number("DesignTemp02"),
+                PKG_ETL_VALIDATION.safe_to_number("DesignTemp03"), PKG_ETL_VALIDATION.safe_to_number("DesignTemp04"),
+                PKG_ETL_VALIDATION.safe_to_number("DesignTemp05"), PKG_ETL_VALIDATION.safe_to_number("DesignTemp06"),
+                PKG_ETL_VALIDATION.safe_to_number("DesignTemp07"), PKG_ETL_VALIDATION.safe_to_number("DesignTemp08"),
+                PKG_ETL_VALIDATION.safe_to_number("DesignTemp09"), PKG_ETL_VALIDATION.safe_to_number("DesignTemp10"),
+                PKG_ETL_VALIDATION.safe_to_number("DesignTemp11"), PKG_ETL_VALIDATION.safe_to_number("DesignTemp12"),
                 "DesignTempRevMark",
                 "NoteIDCorrAllowance", "NoteIDServiceCode", "NoteIDWallThkTol",
                 "NoteIDLongWeldEff", "NoteIDGeneralPCS", "NoteIDDesignCode",
                 "NoteIDPressTempTable", "NoteIDPipeSizeWthTable",
                 "PressElementChange", "TempElementChange",
-                safe_to_number("MaterialGroupID"), safe_to_number("SpecialReqID"), "SpecialReq",
-                "NewVDSSection", "TubePCS", "EDSMJMatrix", safe_to_number("MJReductionFactor"),
+                PKG_ETL_VALIDATION.safe_to_number("MaterialGroupID"), PKG_ETL_VALIDATION.safe_to_number("SpecialReqID"), "SpecialReq",
+                "NewVDSSection", "TubePCS", "EDSMJMatrix", PKG_ETL_VALIDATION.safe_to_number("MJReductionFactor"),
                 SYSDATE, SYSDATE
             FROM STG_PCS_HEADER_PROPERTIES
             WHERE plant_id = p_plant_id

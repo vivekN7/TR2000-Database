@@ -122,14 +122,20 @@ deploy/
 ```
 
 ### Full Deployment
+⚠️ **CRITICAL: Always run deployment scripts from the `deploy/` directory!**
+
 ```bash
-# Deploy everything from scratch
-sqlplus TR2000_STAGING/piping@localhost:1521/XEPDB1 @deploy/DEPLOY_ALL.sql
+# CORRECT: Run from deploy directory (uses relative paths)
+cd deploy
+sqlplus TR2000_STAGING/piping@localhost:1521/XEPDB1 @DEPLOY_ALL.sql
 
 # Or with clean slate first
-sqlplus TR2000_STAGING/piping@localhost:1521/XEPDB1 @deploy/DROP_ALL_OBJECTS.sql
-sqlplus TR2000_STAGING/piping@localhost:1521/XEPDB1 @deploy/DEPLOY_ALL.sql
+cd deploy
+sqlplus TR2000_STAGING/piping@localhost:1521/XEPDB1 @DROP_ALL_OBJECTS.sql
+sqlplus TR2000_STAGING/piping@localhost:1521/XEPDB1 @DEPLOY_ALL.sql
 ```
+
+**Why this matters:** DEPLOY_ALL.sql uses relative paths like `@@01_tables/01_control_tables.sql`. If you run it from the wrong directory, it will fail with "unable to open file" errors.
 
 ### Key Packages
 
